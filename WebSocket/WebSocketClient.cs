@@ -89,6 +89,11 @@ namespace JooyaVision.Server
             _websocketHandle = null;
         }
 
+        public void Send(string message)
+        {
+            SendAsync(message).Wait();
+        }
+
         private async void ReadWebSocketAsync(CancellationToken ct)
         {
             try

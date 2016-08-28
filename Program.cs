@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-
+using System.Collections.Generic;
 namespace JooyaVision.Server
 {
     class Program
@@ -12,7 +12,6 @@ namespace JooyaVision.Server
         public static void Main()
         {
             var listenAddress = new IPEndPoint(IPAddress.Any, 12345);
-
             using (_jooyaServer = new WebSocketServer<JooyaClient>(listenAddress))
             {
                 Console.WriteLine("Started JooyaVision server, press Q to exit.");
@@ -41,9 +40,23 @@ namespace JooyaVision.Server
 
         private class JooyaClient : WebSocketClient
         {
+            static List<string> messages = new List<string>();
             protected override void OnMessage(string message)
             {
                 Broadcast(message);
+                MessageListAppend(message);
+            }
+
+            protected override void OnOpen()
+            {
+                foreach(var m in messages) Send(m);
+            }
+
+
+            private static void MessageListAppend(string message)
+            {
+                messages.Add(message);
+                if (messages.Count > 10) messages.RemoveAt(0);
             }
         }
     }
