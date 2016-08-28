@@ -91,7 +91,17 @@ namespace JooyaVision.Server
 
         public void Send(string message)
         {
-            SendAsync(message).Wait();
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await SendAsync(message);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Send error:{e}");
+                }
+            });
         }
 
         private async void ReadWebSocketAsync(CancellationToken ct)

@@ -49,7 +49,13 @@ namespace JooyaVision.Server
 
             protected override void OnOpen()
             {
-                foreach(var m in messages) Send(m);
+                foreach (var m in messages) Send(m);
+
+                //
+                //for(int i= messages.Count; i > 0; i--)
+                //{
+                //    Send(messages[i]);
+                //}
             }
 
 
